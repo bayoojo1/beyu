@@ -1,0 +1,26 @@
+// Email the user their activation link
+        $email_body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>NaatCast Message</title></head><body style="margin:0px; font-family:Tahoma, Geneva, sans-serif;"><div style="padding:10px; background:#333; font-size:24px; color:#CCC;"><a href="http://www.example.com"><img src="/images/logo.png" width="36" height="30" alt="NaatCast" style="border:none; float:left;"></a>NaatCast Account Activation</div><div style="padding:24px; font-size:17px;">Hello '.$fullName.',<br /><br />Click the link below to activate your account before the next 24 hours. The link would become unusable after then.:<br /><br /><a href="http://www.example.com/activation.php?id='.$uid.'&u='.$u.'&hash='.$hash.'">Click here to activate your account now</a><br /><br />Login after successful activation using your:<br />* E-mail Address: <b>'.$e.'</b></div></body></html>';
+
+          $ch = curl_init();
+
+          curl_setopt($ch, CURLOPT_URL, "URL-HERE");
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+          curl_setopt($ch, CURLOPT_USERPWD, "api" . ":" . "API-KEY");
+          $post = array(
+              'from' => 'No Reply <no-reply@naatcast.com>',
+              'to' => $e,
+              'subject' => 'NaatCast Account Activation',
+              'html' => $email_body,
+          );
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+
+          $result = curl_exec($ch);
+          if($result === false)
+          {
+              echo "Error Number:".curl_errno($ch)."<br>";
+              echo "Error String:".curl_error($ch);
+          } else {
+            echo "signup_success";
+          }
+          curl_close($ch);
